@@ -1,7 +1,7 @@
-import settings as S
-from entities import Enemy
+import settings_RK as S
+from entities_RK import EnemyRK
 
-class WaveManager:
+class WaveManagerRK:
     def __init__(self, path_points):
         self.path = path_points
 
@@ -20,7 +20,7 @@ class WaveManager:
         self.wave_in_progress = False
         self.finished = False
 
-    def start_next_wave(self):
+    def start_next_wave_RK(self):
         if self.finished:
             return
         self.current_wave += 1
@@ -37,7 +37,7 @@ class WaveManager:
         self.speed_mult = sp_m
         self.wave_in_progress = True
 
-    def update(self, dt, enemies):
+    def update_RK(self, dt, enemies):
         if not self.wave_in_progress:
             return
 
@@ -46,7 +46,7 @@ class WaveManager:
             hp = int(S.ENEMY_BASE_HP * self.hp_mult)
             speed = S.ENEMY_BASE_SPEED * self.speed_mult
             reward = S.KILL_REWARD
-            enemies.append(Enemy(self.path, hp, speed, reward))
+            enemies.append(EnemyRK(self.path, hp, speed, reward))
 
             self.to_spawn -= 1
             self.spawn_timer = self.spawn_interval

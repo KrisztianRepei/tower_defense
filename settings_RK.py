@@ -4,7 +4,6 @@ WIDTH, HEIGHT = 1000, 600
 FPS = 60
 TITLE = "Tower Defense - Skeleton"
 
-# Colors
 WHITE = (245, 245, 245)
 BLACK = (20, 20, 20)
 GRAY  = (120, 120, 120)
@@ -15,7 +14,6 @@ BLUE  = (70, 120, 220)
 YELLOW= (240, 210, 80)
 CYAN  = (80, 220, 220)
 
-# Map / path
 PATH_POINTS = [
     (60, 330), (250, 330), (250, 120), (520, 120),
     (520, 460), (820, 460), (820, 260), (950, 260)

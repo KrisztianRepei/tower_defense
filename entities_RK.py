@@ -1,10 +1,10 @@
 import pygame
-from utils import dist
-import settings as S
+from utils_RK import dist_RK
+import settings_RK as S
 
 vec = pygame.math.Vector2
 
-class Enemy:
+class EnemyRK:
     def __init__(self, path_points, hp, speed, reward):
         self.path = [vec(p) for p in path_points]
         self.pos = self.path[0].copy()
@@ -19,7 +19,7 @@ class Enemy:
         self.alive = True
         self.reached_end = False
 
-    def update(self, dt):
+    def update_RK(self, dt):
         if not self.alive or self.reached_end:
             return
 
@@ -44,14 +44,14 @@ class Enemy:
         else:
             self.pos += direction * step
 
-    def take_damage(self, dmg):
+    def take_damage_RK(self, dmg):
         if not self.alive:
             return
         self.hp -= dmg
         if self.hp <= 0:
             self.alive = False
 
-    def draw(self, screen):
+    def draw_RK(self, screen):
         pygame.draw.circle(screen, S.RED, self.pos, self.radius)
 
         bar_w = 28
@@ -64,7 +64,7 @@ class Enemy:
         pygame.draw.rect(screen, S.GREEN, (x, y, bar_w * ratio, bar_h))
 
 
-class Projectile:
+class ProjectileRK:
     def __init__(self, pos, target, damage):
         self.pos = vec(pos)
         self.target = target
@@ -73,7 +73,7 @@ class Projectile:
         self.radius = S.PROJECTILE_RADIUS
         self.alive = True
 
-    def update(self, dt):
+    def update_RK(self, dt):
         if not self.alive or not self.target.alive:
             self.alive = False
             return
@@ -82,18 +82,18 @@ class Projectile:
         d = direction.length()
 
         if d < 2.0:
-            self.target.take_damage(self.damage)
+            self.target.take_damage_RK(self.damage)
             self.alive = False
             return
 
         direction.normalize_ip()
         self.pos += direction * self.speed * dt
 
-    def draw(self, screen):
+    def draw_RK(self, screen):
         pygame.draw.circle(screen, S.YELLOW, self.pos, self.radius)
 
 
-class Tower:
+class TowerRK:
     def __init__(self, pos):
         self.pos = vec(pos)
         self.range = S.TOWER_RANGE
@@ -103,7 +103,7 @@ class Tower:
         self.radius = S.TOWER_RADIUS
         self.selected = False
 
-    def update(self, dt, enemies, projectiles):
+    def update_RK(self, dt, enemies, projectiles):
         if self.cooldown > 0:
             self.cooldown -= dt
 
@@ -112,16 +112,16 @@ class Tower:
         for e in enemies:
             if not e.alive or e.reached_end:
                 continue
-            d = dist(self.pos, e.pos)
+            d = dist_RK(self.pos, e.pos)
             if d <= self.range and d < best_d:
                 best_d = d
                 target = e
 
         if target and self.cooldown <= 0:
-            projectiles.append(Projectile(self.pos, target, self.damage))
+            projectiles.append(ProjectileRK(self.pos, target, self.damage))
             self.cooldown = 1.0 / self.fire_rate
 
-    def draw(self, screen):
+    def draw_RK(self, screen):
         pygame.draw.circle(screen, S.BLUE, self.pos, self.radius)
         pygame.draw.circle(screen, S.CYAN, self.pos, self.range, 1)
 
